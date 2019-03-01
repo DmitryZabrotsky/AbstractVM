@@ -1,7 +1,7 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror
 NAME = avm
-SRC = main.cpp
+SRC = main.cpp Parser.cpp Exeptions.cpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)

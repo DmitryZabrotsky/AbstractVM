@@ -1,13 +1,14 @@
 #include <iostream>
+#include "Parser.hpp"
 
-int main(int argc, char const *argv[])
+int main(int ac, char const **av)
 {
-	if (argc > 2) {
-		std::cout << "a lot of arguments!" << std::endl;
-		exit(0);
+	Parser parser;
+	try {
+		parser.parse(ac, av);
 	}
-	else {
-		std::cout << "say HELLO to " << argv[0] << std::endl;
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
 	}
 	return 0;
 }
