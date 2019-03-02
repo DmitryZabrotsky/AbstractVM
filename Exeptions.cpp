@@ -16,5 +16,9 @@ const char *Exeptions::EmptyFile::what() const throw(){
 	return "File is empty";
 }
 
+const char *Exeptions::CodeError::what() const throw(){
+	return "Code error!";
+}
+
 
 

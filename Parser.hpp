@@ -24,6 +24,7 @@ public:
 private:
     void parseFile(std::string path);
 	void parseConsole();
+	bool verifyString(std::string str, size_t i);
 
 };
 

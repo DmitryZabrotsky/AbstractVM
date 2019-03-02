@@ -1,4 +1,4 @@
-CC = c++
+CC = g++ -std=c++11
 CFLAGS = -Wall -Wextra -Werror
 NAME = avm
 SRC = main.cpp Parser.cpp Exeptions.cpp

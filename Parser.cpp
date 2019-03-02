@@ -38,12 +38,17 @@ void Parser::parseFile(std::string path) {
     }
     else {
         std::string buff;
-
+		size_t i = 0;
         while (std::getline(stream, buff))
         {
-            std::cout << buff;
-            if (!stream.eof())
-                std::cout << "\n";
+        	i++;
+        	if (!buff.empty() && buff[0] != ';') {
+				if (verifyString(buff, i)) {
+					std::cout << buff;
+					if (!stream.eof())
+						std::cout << "\n";
+				}
+			}
         }
         stream.close();
     }
@@ -61,8 +66,14 @@ void Parser::parseConsole() {
 	}
 }
 
-bool verifyString(std::string str) {
-	std::regex integers("^(push|assert)[\\s]+(int8|int16|int32)[(][-]?\\d+[)]");
-	std::regex floats("^(push|assert)[\\s]+(float|double)[(][-]?\\d+(.[0-9]+)[)]");
-	std::regex instructions("");
+bool Parser::verifyString(std::string str, size_t i) {
+	std::regex integers(R"(^(push|assert)[\t ]+(int8|int16|int32)[(][-]?\d+[)][\t ]*(;.*)?$)");
+	std::regex floats(R"(^(push|assert)[\t ]+(float|double)[(][-]?\d+(.[0-9]+)[)][\t ]*(;.*)?$)");
+	std::regex instructions(R"(^(pop|dump|add|sub|mul|div|mod|print|exit)[\t ]*(;.*)?$)");
+
+	if (!regex_match(str, integers) && !regex_match(str, floats) && !regex_match(str, instructions)) {
+		std::cout << i << " ";
+		throw Exeptions::CodeError();
+	}
+	return true;
 }
