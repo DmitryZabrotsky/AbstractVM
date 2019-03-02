@@ -1,3 +1,4 @@
+#include <regex>
 #include "Parser.hpp"
 
 Parser::Parser() {}
@@ -27,9 +28,41 @@ void Parser::parse(int ac, char const **av) {
 }
 
 void Parser::parseFile(std::string path) {
-    std::cout << "file parsing from - " << path << std::endl;
+    std::ifstream stream(path);
+
+    if (!stream.is_open()) {
+        throw Exeptions::WrongFilePath();
+    }
+    else if (stream.peek() == std::ifstream::traits_type::eof()) {
+        throw Exeptions::EmptyFile();
+    }
+    else {
+        std::string buff;
+
+        while (std::getline(stream, buff))
+        {
+            std::cout << buff;
+            if (!stream.eof())
+                std::cout << "\n";
+        }
+        stream.close();
+    }
 }
 
 void Parser::parseConsole() {
-    std::cout << "console parsing" << std::endl;
+	std::string buff;
+
+	while (true) {
+		std::getline(std::cin, buff);
+		if (buff == ";;") {
+			break;
+		}
+		std::cout << buff << std::endl;
+	}
+}
+
+bool verifyString(std::string str) {
+	std::regex integers("^(push|assert)[\\s]+(int8|int16|int32)[(][-]?\\d+[)]");
+	std::regex floats("^(push|assert)[\\s]+(float|double)[(][-]?\\d+(.[0-9]+)[)]");
+	std::regex instructions("");
 }

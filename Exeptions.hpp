@@ -11,16 +11,16 @@ class Exeptions {
 
 public:
     class WrongArgumentsNumber : public std::exception {
-    	public:
-    		const char *what() const throw();
+    public:
+    	const char *what() const throw();
     };
     class WrongFilePath : public std::exception {
-    	public:
-			const char *what() const throw();
+    public:
+		const char *what() const throw();
     };
 	class EmptyFile : public std::exception {
-		public:
-			const char *what() const throw();
+	public:
+		const char *what() const throw();
 	};
 };
 

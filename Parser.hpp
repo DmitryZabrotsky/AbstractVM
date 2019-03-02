@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <exception>
+#include <fstream>
 #include "Exeptions.hpp"
 
 #include <iostream>
@@ -19,6 +20,8 @@ public:
     Parser &operator=(Parser const &obj);
 
     void parse(int ac, char const **av);
+
+private:
     void parseFile(std::string path);
 	void parseConsole();
 
