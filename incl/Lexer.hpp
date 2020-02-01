@@ -19,7 +19,7 @@ private:
     void handleFile(std::string path);
 	void handleConsole();
 	bool verifyString(std::string str, size_t i);
-
+    void eraseComment(std::string &str);
 };
 
 #endif

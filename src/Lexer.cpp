@@ -70,6 +70,7 @@ void Lexer::handleConsole() {
 		if (buff == ";;") {
 			break;
 		}
+        eraseComment(buff);
 		std::cout << buff << std::endl;
 	}
 }
@@ -84,4 +85,11 @@ bool Lexer::verifyString(std::string str, size_t i) {
 		throw Exeptions::CodeError();
 	}
 	return true;
+}
+
+void Lexer::eraseComment(std::string &str) {
+    size_t pos = str.find(";");
+    if (pos != std::string::npos) {
+        str.erase(pos);
+    }
 }

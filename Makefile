@@ -1,7 +1,7 @@
 CC = g++ -std=c++11 -I incl
 CFLAGS = -Wall -Wextra -Werror
 NAME = avm
-SRC = main.cpp Lexer.cpp Exeptions.cpp
+SRC = main.cpp Lexer.cpp Exeptions.cpp CodeLine.cpp
 OBJ = $(addprefix src/, $(SRC:.cpp=.o))
 
 all: $(NAME)
