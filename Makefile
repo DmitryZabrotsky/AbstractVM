@@ -1,8 +1,8 @@
-CC = g++ -std=c++11
+CC = g++ -std=c++11 -I incl
 CFLAGS = -Wall -Wextra -Werror
 NAME = avm
-SRC = main.cpp Parser.cpp Exeptions.cpp
-OBJ = $(SRC:.cpp=.o)
+SRC = main.cpp Lexer.cpp Exeptions.cpp
+OBJ = $(addprefix src/, $(SRC:.cpp=.o))
 
 all: $(NAME)
 
