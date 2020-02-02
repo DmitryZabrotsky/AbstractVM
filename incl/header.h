@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <sstream>
 
 #include "Exeptions.hpp"
 

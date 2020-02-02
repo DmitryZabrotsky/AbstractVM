@@ -19,13 +19,13 @@ Lexer &Lexer::operator=(Lexer const &obj) {
 
 // public
 
-void Lexer::handle(int ac, char const **av) {
+void Lexer::handle(int ac, char const **av, std::vector<CodeLine> &code) {
     switch (ac) {
         case 1:
-            handleConsole();
+            handleConsole(code);
             break;
         case 2:
-            handleFile(av[1]);
+            handleFile(av[1], code);
             break;
         default:
             throw Exeptions::WrongArgumentsNumber();
@@ -35,7 +35,7 @@ void Lexer::handle(int ac, char const **av) {
 
 // private
 
-void Lexer::handleFile(std::string path) {
+void Lexer::handleFile(std::string path, std::vector<CodeLine> &code) {
     std::ifstream stream(path);
 
     if (!stream.is_open()) {
@@ -57,12 +57,22 @@ void Lexer::handleFile(std::string path) {
 						std::cout << "\n";
 				}
 			}
+
+            eraseComment(buff);
+            std::cout << "with out comment: " << buff << std::endl;
+            
+            auto tokens = splitLine(buff);
+
+            if (checkGrammar(tokens)) {
+                std::cout << "profit." << code.size() << std::endl;
+            }
+
         }
         stream.close();
     }
 }
 
-void Lexer::handleConsole() {
+void Lexer::handleConsole(std::vector<CodeLine> &code) {
 	std::string buff;
 
 	while (true) {
@@ -70,9 +80,59 @@ void Lexer::handleConsole() {
 		if (buff == ";;") {
 			break;
 		}
-        eraseComment(buff);
-		std::cout << buff << std::endl;
+        if (!buff.empty() && buff[0] != ';') {
+            eraseComment(buff);
+            std::cout << "with out comment: " << buff << std::endl;
+            
+            auto tokens = splitLine(buff);
+
+            if (checkGrammar(tokens)) {
+                std::cout << "profit." << code.size() << std::endl;
+            }
+
+            // std::cout << tokens.size() << std::endl;        
+            // for (auto token : tokens) {
+            // 	std::cout << token << std::endl;        
+            // }
+        }
 	}
+}
+
+bool Lexer::checkGrammar(std::vector<std::string> &tokens) {
+    bool res = false;
+    size_t size = tokens.size();
+    
+    if (size > 2) {
+        throw Exeptions::InvalidExpression();
+    }
+    else if (size == 2) {
+        res = checkInstructionWithValue(tokens);
+    } else if (size == 1) {
+        res = checkInstruction(tokens);
+    }
+    return res;
+}
+
+bool Lexer::checkInstruction(std::vector<std::string> &tokens) {
+	std::regex instructions("^(pop|dump|add|sub|mul|div|mod|print|exit)");	
+    
+    if (!regex_match(tokens[0], instructions)) {
+        throw Exeptions::InvalidInstraction();
+	}
+	return true;
+}
+
+bool Lexer::checkInstructionWithValue(std::vector<std::string> &tokens) {
+	std::regex instructions("^(push|assert)");   
+    if (!regex_match(tokens[0], instructions)) {
+        throw Exeptions::InvalidInstraction();
+	}
+    
+    std::regex values(R"(^(int8|int16|int32)[(][-]?\d+[)]|^(float|double)[(][-]?\d+(.[0-9]+)[)])");
+    if (!regex_match(tokens[1], values)) {
+        throw Exeptions::InvalidValue();
+	}
+	return true;
 }
 
 bool Lexer::verifyString(std::string str, size_t i) {
@@ -92,4 +152,12 @@ void Lexer::eraseComment(std::string &str) {
     if (pos != std::string::npos) {
         str.erase(pos);
     }
+}
+
+std::vector<std::string> Lexer::splitLine(std::string &line) {
+    std::istringstream tokenStream(line);
+    auto first = std::istream_iterator<std::string>{tokenStream};
+    auto last = std::istream_iterator<std::string>();
+	std::vector<std::string> tokens(first, last);
+	return tokens;
 }

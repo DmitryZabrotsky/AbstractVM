@@ -10,19 +10,31 @@
 class Exeptions {
 
 public:
-    class WrongArgumentsNumber : public std::exception {
-    public:
-    	const char *what() const throw();
-    };
-    class WrongFilePath : public std::exception {
-    public:
+	class WrongArgumentsNumber : public std::exception {
+	public:
 		const char *what() const throw();
-    };
+	};
+	class WrongFilePath : public std::exception {
+	public:
+		const char *what() const throw();
+	};
 	class EmptyFile : public std::exception {
 	public:
 		const char *what() const throw();
 	};
 	class CodeError : public std::exception {
+	public:
+		const char *what() const throw();
+	};
+	class InvalidExpression : public std::exception {
+	public:
+		const char *what() const throw();
+	};
+	class InvalidInstraction : public std::exception {
+	public:
+		const char *what() const throw();
+	};
+	class InvalidValue : public std::exception {
 	public:
 		const char *what() const throw();
 	};

@@ -6,7 +6,7 @@ int main(int ac, char const **av)
 
 	Lexer lexer;
 	try {
-		lexer.handle(ac, av);
+		lexer.handle(ac, av, code);
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
