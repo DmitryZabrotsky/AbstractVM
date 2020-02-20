@@ -12,31 +12,35 @@ class Exeptions {
 public:
 	class WrongArgumentsNumber : public std::exception {
 	public:
-		const char *what() const throw();
+		const char *what() const noexcept override;
 	};
 	class WrongFilePath : public std::exception {
 	public:
-		const char *what() const throw();
+		const char *what() const noexcept override;
 	};
 	class EmptyFile : public std::exception {
 	public:
-		const char *what() const throw();
+		const char *what() const noexcept override;
 	};
 	class CodeError : public std::exception {
 	public:
-		const char *what() const throw();
+		const char *what() const noexcept override;
 	};
 	class InvalidExpression : public std::exception {
 	public:
-		const char *what() const throw();
+		const char *what() const noexcept override;
 	};
 	class InvalidInstraction : public std::exception {
 	public:
-		const char *what() const throw();
+		const char *what() const noexcept override;
 	};
 	class InvalidValue : public std::exception {
 	public:
-		const char *what() const throw();
+		const char *what() const noexcept override;
+	};
+	class MissingInstructionValue : public std::exception {
+	public:
+		const char *what() const noexcept override;
 	};
 };
 

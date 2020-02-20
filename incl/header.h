@@ -10,6 +10,7 @@
 #include <vector>
 #include <utility>
 #include <sstream>
+#include <tuple>
 
 #include "Exeptions.hpp"
 

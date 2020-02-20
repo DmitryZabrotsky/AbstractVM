@@ -14,9 +14,11 @@ public:
     ~CodeLine();
     CodeLine(CodeLine const &obj);
 
-    CodeLine(int num, std::string op, std::string val, std::string err);
+    void writeError(std::string);
 
     CodeLine &operator=(CodeLine const &obj);
+
+    void printLine();
 };
 
 #endif
