@@ -49,20 +49,40 @@ void Lexer::handleFile(std::string path, code_t &code) {
 		size_t i = 0;
 		while (std::getline(stream, buff))
 		{
-			i++;
-			if (!buff.empty() && buff[0] != ';') {
-				eraseComment(buff);
-				std::cout << "with out comment: " << buff << std::endl;
+			CodeLine line;
 
+			i++;
+			line.number = i;
+
+			if (!buff.empty() && buff[0] != ';') {
+
+				eraseComment(buff);
 				auto tokens = splitLine(buff);
 
-				if (checkGrammar(tokens).first) {
-					std::cout << "profit." << code.size() << std::endl;
+				bool isValid = false;
+				size_t size;
+				try {
+					std::tie(isValid, size) = checkGrammar(tokens);
+				}
+				catch(const std::exception& e)
+				{
+					std::stringstream stringstream;
+					stringstream << " \e[32;1mline " << line.number << "\e[0m : lexical \e[31merror\e[0m : " << e.what();
+					line.writeError(stringstream.str());
+					this->errors++;
 				}
 
-				if (!stream.eof())
-					std::cout << "\n";
+				if (isValid) {
+						line.operation = OPERATION;
+					if (size == 2)
+						line.value = VALUE;
 				}
+
+				code.push_back(line);
+
+				// if (!stream.eof())
+				// 	std::cout << "\n";
+			}
 		}
 		stream.close();
 	}
@@ -107,7 +127,6 @@ void Lexer::handleConsole(code_t &code) {
 			}
 
 			if (isValid) {
-				std::cout << "isValid " << code.size() << std::endl;
 					line.operation = OPERATION;
 				if (size == 2)
 					line.value = VALUE;

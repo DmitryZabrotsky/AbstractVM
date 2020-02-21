@@ -12,7 +12,7 @@ int main(int ac, char const **av)
 			std::cout << msg << std::endl;
 			for (auto line : code)
 				line.printError();
-			std::cout << "\n" << std::endl;
+			std::cout << std::endl;
 		}
 	}
 	catch (std::exception& e) {
