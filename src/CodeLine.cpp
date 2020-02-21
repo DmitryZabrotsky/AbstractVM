@@ -34,9 +34,14 @@ void CodeLine::writeError(std::string err) {
     }
 }
 
+void CodeLine::printError() {
+    if (this->error.first)
+        std::cout << this->error.second << std::endl;
+}
+
 void CodeLine::printLine() {
-    std::cout << "num: " << this->number << "\n" << std::endl;
-    std::cout << "opn: " << this->operation << "\n" << std::endl;
-    std::cout << "val: " << this->value << "\n" << std::endl;
-    std::cout << "err: " << this->error.first << " " << this->error.second << std::endl;
+    std::cout << "\nnum: " << this->number << std::endl;
+    std::cout << "opn: " << this->operation << std::endl;
+    std::cout << "val: " << this->value << std::endl;
+    std::cout << "err: " << this->error.first << "\tmsg: " << this->error.second << "\n" << std::endl;
 }

@@ -18,6 +18,7 @@ public:
 
     CodeLine &operator=(CodeLine const &obj);
 
+    void printError();
     void printLine();
 };
 

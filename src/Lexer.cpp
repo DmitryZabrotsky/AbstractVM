@@ -19,7 +19,7 @@ Lexer &Lexer::operator=(Lexer const &obj) {
 
 // public
 
-void Lexer::handle(int ac, char const **av, std::vector<CodeLine> &code) {
+void Lexer::handle(int ac, char const **av, code_t &code) {
 	switch (ac) {
 		case 1:
 			handleConsole(code);
@@ -35,7 +35,7 @@ void Lexer::handle(int ac, char const **av, std::vector<CodeLine> &code) {
 
 // private
 
-void Lexer::handleFile(std::string path, std::vector<CodeLine> &code) {
+void Lexer::handleFile(std::string path, code_t &code) {
 	std::ifstream stream(path);
 
 	if (!stream.is_open()) {
@@ -68,14 +68,14 @@ void Lexer::handleFile(std::string path, std::vector<CodeLine> &code) {
 	}
 }
 
-void printTokens(std::vector<std::string> &tokens) {
+void printTokens(tokens_t &tokens) {
 	std::cout << tokens.size() << std::endl;
 	for (auto token : tokens) {
 		std::cout << token << std::endl;
 	}
 }
 
-void Lexer::handleConsole(std::vector<CodeLine> &code) {
+void Lexer::handleConsole(code_t &code) {
 	std::string buff;
 
 	size_t i = 0;
@@ -86,17 +86,12 @@ void Lexer::handleConsole(std::vector<CodeLine> &code) {
 		line.number = i;
 
 		std::getline(std::cin, buff);
-		if (buff == ";;") {
+		if (buff == ";;")
 			break;
-		}
+
 		if (!buff.empty() && buff[0] != ';') {
 			eraseComment(buff);
-
-			// std::cout << "with out comment: " << buff << std::endl;
-
 			auto tokens = splitLine(buff);
-
-			// printTokens(tokens);
 
 			bool isValid = false;
 			size_t size;
@@ -106,28 +101,24 @@ void Lexer::handleConsole(std::vector<CodeLine> &code) {
 			catch(const std::exception& e)
 			{
 				std::stringstream stringstream;
-				stringstream << "line: " << line.number << " | lexical error | " << e.what();
+				stringstream << " \e[32;1mline " << line.number << "\e[0m : lexical \e[31merror\e[0m : " << e.what();
 				line.writeError(stringstream.str());
-				this->errors = true;
+				this->errors++;
 			}
 
 			if (isValid) {
 				std::cout << "isValid " << code.size() << std::endl;
-				if (size == 1) {
-					line.operation = tokens[0];
-				}
-				if (size == 2) {
-					line.operation = tokens[0];
-					line.value = tokens[1];
-				}
+					line.operation = OPERATION;
+				if (size == 2)
+					line.value = VALUE;
 			}
 		}
 
-		line.printLine();
+		code.push_back(line);
 	}
 }
 
-std::pair<bool, size_t> Lexer::checkGrammar(std::vector<std::string> &tokens) {
+std::pair<bool, size_t> Lexer::checkGrammar(tokens_t &tokens) {
 	size_t size = tokens.size();
 	std::pair<bool, size_t> res = std::make_pair(false, size);
 
@@ -142,17 +133,17 @@ std::pair<bool, size_t> Lexer::checkGrammar(std::vector<std::string> &tokens) {
 	return res;
 }
 
-bool Lexer::checkInstruction(std::vector<std::string> &tokens) {
+bool Lexer::checkInstruction(tokens_t &tokens) {
 	bool res = true;
 
 	std::regex instructions("^(push|assert|pop|dump|add|sub|mul|div|mod|print|exit)");
-	if (!regex_match(tokens[0], instructions)) {
+	if (!regex_match(OPERATION, instructions)) {
 		res = false;
 		throw Exeptions::InvalidInstraction();
 	}
 
 	std::regex instructionsWithValue("^(push|assert)");
-	if (regex_match(tokens[0], instructionsWithValue)) {
+	if (regex_match(OPERATION, instructionsWithValue)) {
 		res = false;
 		throw Exeptions::MissingInstructionValue();
 	}
@@ -160,35 +151,23 @@ bool Lexer::checkInstruction(std::vector<std::string> &tokens) {
 	return res;
 }
 
-bool Lexer::checkInstructionWithValue(std::vector<std::string> &tokens) {
+bool Lexer::checkInstructionWithValue(tokens_t &tokens) {
 	bool res = true;
 
 	std::regex instructions("^(push|assert)");
-	if (!regex_match(tokens[0], instructions)) {
+	if (!regex_match(OPERATION, instructions)) {
 		res = false;
 		throw Exeptions::InvalidInstraction();
 	}
 
 	std::regex values(R"(^(int8|int16|int32)[(][-]?\d+[)]|^(float|double)[(][-]?\d+(.[0-9]+)[)])");
-	if (!regex_match(tokens[1], values)) {
+	if (!regex_match(VALUE, values)) {
 		res = false;
 		throw Exeptions::InvalidValue();
 	}
 
 	return res;
 }
-
-// bool Lexer::verifyString(std::string str, size_t i) {
-// 	std::regex integers(R"(^(push|assert)[\t ]+(int8|int16|int32)[(][-]?\d+[)][\t ]*(;.*)?$)");
-// 	std::regex floats(R"(^(push|assert)[\t ]+(float|double)[(][-]?\d+(.[0-9]+)[)][\t ]*(;.*)?$)");
-// 	std::regex instructions(R"(^(pop|dump|add|sub|mul|div|mod|print|exit)[\t ]*(;.*)?$)");
-
-// 	if (!regex_match(str, integers) && !regex_match(str, floats) && !regex_match(str, instructions)) {
-// 		std::cout << i << " ";
-// 		throw Exeptions::CodeError();
-// 	}
-// 	return true;
-// }
 
 void Lexer::eraseComment(std::string &str) {
 	size_t pos = str.find(";");
@@ -197,10 +176,10 @@ void Lexer::eraseComment(std::string &str) {
 	}
 }
 
-std::vector<std::string> Lexer::splitLine(std::string &line) {
+tokens_t Lexer::splitLine(std::string &line) {
 	std::istringstream tokenStream(line);
 	auto first = std::istream_iterator<std::string>{tokenStream};
 	auto last = std::istream_iterator<std::string>();
-	std::vector<std::string> tokens(first, last);
+	tokens_t tokens(first, last);
 	return tokens;
 }
