@@ -79,9 +79,6 @@ void Lexer::handleFile(std::string path, code_t &code) {
 				}
 
 				code.push_back(line);
-
-				// if (!stream.eof())
-				// 	std::cout << "\n";
 			}
 		}
 		stream.close();

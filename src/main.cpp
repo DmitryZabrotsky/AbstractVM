@@ -14,6 +14,10 @@ int main(int ac, char const **av)
 				line.printError();
 			std::cout << std::endl;
 		}
+		else {
+			for (auto line : code)
+				line.printLine();
+		}
 	}
 	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
