@@ -1,5 +1,5 @@
 #ifndef LEXER_HPP
-#define LEXER_HPP
+# define LEXER_HPP
 
 #include "CodeLine.hpp"
 

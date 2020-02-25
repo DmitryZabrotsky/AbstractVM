@@ -3,7 +3,9 @@
 
 // canonical scope
 
-Lexer::Lexer() {}
+Lexer::Lexer() {
+	this->errors = 0;
+}
 
 Lexer::~Lexer() {}
 

@@ -1,5 +1,5 @@
 #ifndef CODELINE_HPP
-#define CODELINE_HPP
+# define CODELINE_HPP
 
 #include "header.h"
 
