@@ -5,6 +5,7 @@
 
 class Factory {
     public:
+        static IOperand const * createNewOperand(eOperandType type, std::string const & value);
         IOperand const * createOperand( eOperandType type, std::string const & value ) const;
 
     private:

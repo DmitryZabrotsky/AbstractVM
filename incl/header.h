@@ -11,6 +11,8 @@
 #include <utility>
 #include <sstream>
 #include <tuple>
+#include <cstdint>
+#include <cmath>
 
 #include "Exeptions.hpp"
 

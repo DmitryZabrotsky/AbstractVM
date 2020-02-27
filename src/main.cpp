@@ -1,8 +1,8 @@
-#include "Lexer.hpp"
+#include "../incl/Parser.hpp"
 
 int main(int ac, char const **av)
 {
-    std::vector<CodeLine> code;
+    code_t code;
 
 	Lexer lexer;
 	try {

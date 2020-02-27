@@ -1,8 +1,12 @@
 #ifndef PARSER_HPP
 #define PARSER_HPP
 
+#include "Operand.hpp"
+
 class Parser {
 public:
+
+    int errors;
 
     Parser();
     ~Parser();
@@ -10,7 +14,10 @@ public:
 
     Parser &operator=(Parser const &obj);
 
-    void parse(int ac, char const **av);
+    void parse(code_t &code);
+
+private:
+    void splitValue(std::string val);
 };
 
 #endif
