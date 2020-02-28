@@ -3,6 +3,11 @@
 
 #include "Operand.hpp"
 
+typedef std::pair<std::string, std::string> value_t;
+
+#define INS_VALUE_TYPE instructionValue.first
+#define INS_VALUE instructionValue.second
+
 class Parser {
 public:
 
@@ -18,6 +23,7 @@ public:
 
 private:
     void splitValue(std::string val);
+    value_t splitInstructionValue(std::string typevalue);
 };
 
 #endif

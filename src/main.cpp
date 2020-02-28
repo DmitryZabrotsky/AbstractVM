@@ -5,6 +5,7 @@ int main(int ac, char const **av)
     code_t code;
 
 	Lexer lexer;
+	Parser parser;
 	try {
 		lexer.handle(ac, av, code);
 		if (lexer.errors > 0) {
@@ -17,6 +18,8 @@ int main(int ac, char const **av)
 		else {
 			for (auto line : code)
 				line.printLine();
+
+			parser.parse(code);
 		}
 	}
 	catch (std::exception& e) {
