@@ -22,6 +22,7 @@ Lexer &Lexer::operator=(Lexer const &obj) {
 // public
 
 void Lexer::handle(int ac, char const **av, code_t &code) {
+    std::cout << "\n\n\t\t \e[36m[ Lexer ]\e[0m : lexer handling phase" << std::endl;
 	switch (ac) {
 		case 1:
 			handleConsole(code);
@@ -75,7 +76,7 @@ void Lexer::handleFile(std::string path, code_t &code) {
 				}
 
 				if (isValid) {
-						line.operation = OPERATION;
+						line.instruction = INSTRUCTION;
 					if (size == 2)
 						line.value = VALUE;
 				}
@@ -126,7 +127,7 @@ void Lexer::handleConsole(code_t &code) {
 			}
 
 			if (isValid) {
-					line.operation = OPERATION;
+					line.instruction = INSTRUCTION;
 				if (size == 2)
 					line.value = VALUE;
 			}
@@ -155,13 +156,13 @@ bool Lexer::checkInstruction(tokens_t &tokens) {
 	bool res = true;
 
 	std::regex instructions("^(push|assert|pop|dump|add|sub|mul|div|mod|print|exit)");
-	if (!regex_match(OPERATION, instructions)) {
+	if (!regex_match(INSTRUCTION, instructions)) {
 		res = false;
 		throw Exeptions::InvalidInstraction();
 	}
 
 	std::regex instructionsWithValue("^(push|assert)");
-	if (regex_match(OPERATION, instructionsWithValue)) {
+	if (regex_match(INSTRUCTION, instructionsWithValue)) {
 		res = false;
 		throw Exeptions::MissingInstructionValue();
 	}
@@ -173,7 +174,7 @@ bool Lexer::checkInstructionWithValue(tokens_t &tokens) {
 	bool res = true;
 
 	std::regex instructions("^(push|assert)");
-	if (!regex_match(OPERATION, instructions)) {
+	if (!regex_match(INSTRUCTION, instructions)) {
 		res = false;
 		throw Exeptions::InvalidInstraction();
 	}

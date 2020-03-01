@@ -3,7 +3,7 @@
 CodeLine::CodeLine() {}
 
 // CodeLine::CodeLine(int num, std::string op, std::string val, std::string err) :
-// number(num), operation(op), value(val)
+// number(num), instruction(op), value(val)
 // {
 //     if (!err.empty()) {
 //         this->error = std::make_pair(true, err);
@@ -20,7 +20,7 @@ CodeLine::CodeLine(CodeLine const &obj) {
 
 CodeLine &CodeLine::operator=(CodeLine const &obj) {
     this->number = obj.number;
-    this->operation = obj.operation;
+    this->instruction = obj.instruction;
     this->value = obj.value;
     this->error = obj.error;
     return (*this);
@@ -41,7 +41,7 @@ void CodeLine::printError() {
 
 void CodeLine::printLine() {
     std::cout << "\nnum: " << this->number << std::endl;
-    std::cout << "opn: " << this->operation << std::endl;
+    std::cout << "opn: " << this->instruction << std::endl;
     std::cout << "val: " << this->value << std::endl;
     std::cout << "err: " << this->error.first << "\tmsg: " << this->error.second << "\n" << std::endl;
 }

@@ -6,7 +6,7 @@
 class CodeLine {
 public:
     int number;
-    std::string operation;
+    std::string instruction;
     std::string value;
     std::pair<bool, std::string> error;
 

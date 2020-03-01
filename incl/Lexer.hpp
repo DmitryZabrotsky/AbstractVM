@@ -3,7 +3,7 @@
 
 #include "CodeLine.hpp"
 
-#define OPERATION tokens[0]
+#define INSTRUCTION tokens[0]
 #define VALUE tokens[1]
 
 typedef std::vector<std::string> tokens_t;
