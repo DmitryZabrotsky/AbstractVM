@@ -34,19 +34,24 @@ void Parser::parse(code_t &code) {
     std::cout << "\n\n\t\t \e[35m[ Pareser ]\e[0m : parse code phase" << std::endl;
 
     for (auto line : code) {
-        if (!line.value.empty()) {
-	        std::cout << line.value << std::endl;
-            value_t instructionValue = splitInstructionValue(line.value);
-	        std::cout << INS_VALUE_TYPE << std::endl;
-	        std::cout << INS_VALUE << std::endl;
-        }
-
         (this->*(this->instructions[line.instruction]))(line);
     };
 };
 
 void Parser::push(CodeLine &line) {
     std::cout << "\e[35m" << line.instruction << "\e[0m" << std::endl;
+
+    value_t instructionValue = splitInstructionValue(line.value);
+
+    std::cout << INS_VALUE_TYPE << std::endl;
+    std::cout << INS_VALUE << std::endl;
+
+    auto operand = Factory::createNewOperand(this->types[INS_VALUE_TYPE], INS_VALUE);
+    std::cout << "Operand type: " << operand->getType() << std::endl;;
+    std::cout << "Operand value: " << operand->toString() << std::endl;;
+
+    // direct creating Operand object in the end of the vector with out copying :
+    this->operands.emplace_back(Factory::createNewOperand(this->types[INS_VALUE_TYPE], INS_VALUE));
 };
 
 void Parser::pop(CodeLine &line) {
