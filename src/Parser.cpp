@@ -3,6 +3,9 @@
 Parser::Parser() {
     this->errors = 0;
     this->types = { {"int8",   Int8}, {"int16",  Int16}, {"int32",  Int32}, {"float",  Float}, {"double", Double} };
+    this->instructions = {{"push",   &Parser::push}, {"pop",    &Parser::pop}, {"dump",   &Parser::dump}, {"assert", &Parser::assert},
+	{"add",    &Parser::add}, {"sub",    &Parser::sub},	{"mul",    &Parser::mul}, {"div",    &Parser::div}, {"mod",    &Parser::mod},
+	{"print",  &Parser::print},	{"exit",   &Parser::exit}};
 };
 
 Parser::~Parser() {};
@@ -30,19 +33,6 @@ value_t Parser::splitInstructionValue(std::string typevalue) {
 void Parser::parse(code_t &code) {
     std::cout << "\n\n\t\t \e[35m[ Pareser ]\e[0m : parse code phase" << std::endl;
 
-    static std::map<std::string, void (Parser::*)(CodeLine &)> instructions;
-    instructions = {{"push",   &Parser::push},
-	{"pop",    &Parser::pop},
-	{"dump",   &Parser::dump},
-	{"assert", &Parser::assert},
-	{"add",    &Parser::add},
-	{"sub",    &Parser::sub},
-	{"mul",    &Parser::mul},
-	{"div",    &Parser::div},
-	{"mod",    &Parser::mod},
-	{"print",  &Parser::print},
-	{"exit",   &Parser::exit}};
-
     for (auto line : code) {
         if (!line.value.empty()) {
 	        std::cout << line.value << std::endl;
@@ -51,7 +41,7 @@ void Parser::parse(code_t &code) {
 	        std::cout << INS_VALUE << std::endl;
         }
 
-        (this->*(instructions[line.instruction]))(line);
+        (this->*(this->instructions[line.instruction]))(line);
     };
 };
 

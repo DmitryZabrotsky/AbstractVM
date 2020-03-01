@@ -27,6 +27,7 @@ private:
 
     operands_t operands;
     types_t types;
+    std::map<std::string, void (Parser::*)(CodeLine &)> instructions;
 
     void splitValue(std::string val);
     value_t splitInstructionValue(std::string typevalue);
