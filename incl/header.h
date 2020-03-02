@@ -13,6 +13,8 @@
 #include <tuple>
 #include <cstdint>
 #include <cmath>
+#include <climits>
+#include <cfloat>
 
 #include "Exeptions.hpp"
 

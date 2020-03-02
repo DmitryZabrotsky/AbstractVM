@@ -42,6 +42,16 @@ public:
 	public:
 		const char *what() const noexcept override;
 	};
+
+	class ValueOverflowExeption : public std::exception {
+	public:
+		const char *what() const noexcept override;
+	};
+
+	class ValueUnderflowExeption : public std::exception {
+	public:
+		const char *what() const noexcept override;
+	};
 };
 
 #endif

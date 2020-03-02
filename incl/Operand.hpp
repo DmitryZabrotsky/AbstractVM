@@ -7,14 +7,80 @@ template<typename T>
 class Operand : public IOperand {
     public:
 
-        explicit Operand<T>(eOperandType type, std::string value) : type(type), value(value) {}
+        explicit Operand<T>(eOperandType type, std::string value) : type(type), value(value) {
+            switch (type) {
+                case Int8: {
+                    long long val = std::stoll(value);
+
+                    std::cout << std::to_string(val) << " max: " << SCHAR_MAX << " min: " <<  SCHAR_MIN << std::endl;
+
+                    if (val > SCHAR_MAX) {
+                        std::cout << "val > val > SCHAR_MAX" << std::endl;
+                        throw Exeptions::ValueOverflowExeption();
+                    } else if (val < SCHAR_MIN) {
+                        std::cout << "val < SCHAR_MIN" << std::endl;
+                        throw Exeptions::ValueUnderflowExeption();
+                    };
+                    break;
+                }
+
+                case Int16: {
+                    long long val = std::stoll(value);
+
+                    std::cout << std::to_string(val) << " max: " << SHRT_MAX << " min: " <<  SHRT_MIN << std::endl;
+
+                    if (val > SHRT_MAX) {
+                        throw Exeptions::ValueOverflowExeption();
+                    } else if (val < SHRT_MIN) {
+                        throw Exeptions::ValueUnderflowExeption();
+                    };
+                    break;
+                }
+
+                case Int32: {
+                    long long val = std::stoll(value);
+
+                    std::cout << std::to_string(val) << " max: " << INT_MAX << " min: " <<  INT_MIN << std::endl;
+
+                    if (val > INT_MAX) {
+                        throw Exeptions::ValueOverflowExeption();
+                    } else if (val < INT_MIN) {
+                        throw Exeptions::ValueUnderflowExeption();
+                    };
+                    break;
+                }
+
+                case Float: {
+                    long double val = std::stod(value);
+
+                    std::cout << std::to_string(val) << " max: " << FLT_MAX << " min: " <<  -FLT_MAX << std::endl;
+
+                    if (val > FLT_MAX) {
+                        throw Exeptions::ValueOverflowExeption();
+                    } else if (val < -FLT_MAX) {
+                        throw Exeptions::ValueUnderflowExeption();
+                    };
+                    break;
+                }
+
+                case Double: {
+                    long double val = std::stod(value);
+
+                    std::cout << std::to_string(val) << " max: " << DBL_MAX << " min: " <<  -DBL_MAX << std::endl;
+
+                    if (val > DBL_MAX) {
+                        throw Exeptions::ValueOverflowExeption();
+                    } else if (val < -DBL_MAX) {
+                        throw Exeptions::ValueUnderflowExeption();
+                    };
+                    break;
+                }
+            };
+        };
 
         Operand() = delete;
-
         Operand(Operand const &obj) = delete;
-
         ~Operand() override = default;
-
         Operand &operator=(Operand const &obj) = delete;
 
         eOperandType getType() const override {
