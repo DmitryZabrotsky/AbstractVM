@@ -5,8 +5,11 @@
 
 template<typename T>
 class Operand : public IOperand {
-    public:
+    private:
+        eOperandType type;
+        std::string value;
 
+    public:
         explicit Operand<T>(eOperandType type, std::string value) : type(type), value(value) {
             switch (type) {
                 case Int8: {
@@ -15,10 +18,8 @@ class Operand : public IOperand {
                     std::cout << std::to_string(val) << " max: " << SCHAR_MAX << " min: " <<  SCHAR_MIN << std::endl;
 
                     if (val > SCHAR_MAX) {
-                        std::cout << "val > val > SCHAR_MAX" << std::endl;
                         throw Exeptions::ValueOverflowExeption();
                     } else if (val < SCHAR_MIN) {
-                        std::cout << "val < SCHAR_MIN" << std::endl;
                         throw Exeptions::ValueUnderflowExeption();
                     };
                     break;
@@ -100,15 +101,15 @@ class Operand : public IOperand {
 		    std::string resValue;
 
             if (type > operand.getType()) {
-                resType = type;
+                resType = this->type;
             } else {
-                operand.getType();
+                resType = operand.getType();
             }
 
             if (resType > Int32) {
-    		    resValue = std::to_string(std::stold(toString()) + std::stold(operand.toString()));
+    		    resValue = std::to_string(std::stold(this->toString()) + std::stold(operand.toString()));
             } else {
-    		    resValue = std::to_string(std::stoll(toString()) + std::stoll(operand.toString()));
+    		    resValue = std::to_string(std::stoll(this->toString()) + std::stoll(operand.toString()));
             }
 
             std::cout << "IOperand operator+ " << std::endl;
@@ -120,86 +121,101 @@ class Operand : public IOperand {
 		    std::string resValue;
 
             if (type > operand.getType()) {
-                resType = type;
+                resType = this->type;
             } else {
-                operand.getType();
+                resType = operand.getType();
             }
 
             if (resType > Int32) {
-    		    resValue = std::to_string(std::stold(toString()) - std::stold(operand.toString()));
+    		    resValue = std::to_string(std::stold(this->toString()) - std::stold(operand.toString()));
             } else {
-    		    resValue = std::to_string(std::stoll(toString()) - std::stoll(operand.toString()));
+    		    resValue = std::to_string(std::stoll(this->toString()) - std::stoll(operand.toString()));
             }
 
             std::cout << "IOperand operator- " << std::endl;
 
-            return Factory::createNewOperand(resType, "pisos42");
+            return Factory::createNewOperand(resType, resValue);
         };
 		IOperand const * operator*( IOperand const & operand ) const override {
             eOperandType resType;
 		    std::string resValue;
 
             if (type > operand.getType()) {
-                resType = type;
+                resType = this->type;
             } else {
-                operand.getType();
+                resType = operand.getType();
             }
 
             if (resType > Int32) {
-    		    resValue = std::to_string(std::stold(toString()) * std::stold(operand.toString()));
+    		    resValue = std::to_string(std::stold(this->toString()) * std::stold(operand.toString()));
             } else {
-    		    resValue = std::to_string(std::stoll(toString()) * std::stoll(operand.toString()));
+    		    resValue = std::to_string(std::stoll(this->toString()) * std::stoll(operand.toString()));
             }
 
             std::cout << "IOperand operator* " << std::endl;
 
-            return Factory::createNewOperand(resType, "pisos42");
+            return Factory::createNewOperand(resType, resValue);
         };
+
+        bool isZero(eOperandType const type, std::string const &val) const {
+            bool res;
+
+            if (type > Int32) {
+                res = std::stold(val) == 0.0;
+            } else {
+                res = std::stoll(val) == 0;
+            }
+            return res;
+        };
+
 		IOperand const * operator/( IOperand const & operand ) const override {
             eOperandType resType;
 		    std::string resValue;
 
             if (type > operand.getType()) {
-                resType = type;
+                resType = this->type;
             } else {
-                operand.getType();
+                resType = operand.getType();
+            }
+
+            if (isZero(resType, operand.toString())) {
+                throw Exeptions::DivisionByZero();
             }
 
             if (resType > Int32) {
-    		    resValue = std::to_string(std::stold(toString()) / std::stold(operand.toString()));
+    		    resValue = std::to_string(std::stold(this->toString()) / std::stold(operand.toString()));
             } else {
-    		    resValue = std::to_string(std::stoll(toString()) / std::stoll(operand.toString()));
+    		    resValue = std::to_string(std::stoll(this->toString()) / std::stoll(operand.toString()));
             }
 
             std::cout << "IOperand operator/ " << std::endl;
 
-            return Factory::createNewOperand(resType, "pisos42");
+            return Factory::createNewOperand(resType, resValue);
         };
 		IOperand const * operator%( IOperand const & operand ) const override {
             eOperandType resType;
 		    std::string resValue;
 
             if (type > operand.getType()) {
-                resType = type;
+                resType = this->type;
             } else {
-                operand.getType();
+                resType = operand.getType();
+            }
+
+            if (isZero(resType, operand.toString())) {
+                throw Exeptions::ModuloByZero();
             }
 
             if (resType > Int32) {
-                resValue = std::to_string(fmod(std::stold(toString()), std::stold(operand.toString())));
+                resValue = std::to_string(fmod(std::stold(this->toString()), std::stold(operand.toString())));
             } else {
-                resValue = std::to_string(std::stoll(toString()) % std::stoll(operand.toString()));
+                resValue = std::to_string(std::stoll(this->toString()) % std::stoll(operand.toString()));
             }
 
             std::cout << "IOperand operator% " << std::endl;
 
-            return Factory::createNewOperand(resType, "pisos42");
+            return Factory::createNewOperand(resType, resValue);
         };
-
-
-    private:
-        eOperandType type;
-        std::string value;
 };
 
 #endif

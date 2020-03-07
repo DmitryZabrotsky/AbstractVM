@@ -22,7 +22,7 @@ Lexer &Lexer::operator=(Lexer const &obj) {
 // public
 
 void Lexer::handle(int ac, char const **av, code_t &code) {
-    std::cout << "\n\n\t\t \e[36m[ Lexer ]\e[0m : lexer handling phase" << std::endl;
+    // std::cout << "\n\n\t\t \e[36m[ Lexer ]\e[0m : lexer handling phase" << std::endl;
 	switch (ac) {
 		case 1:
 			handleConsole(code);
@@ -131,9 +131,9 @@ void Lexer::handleConsole(code_t &code) {
 				if (size == 2)
 					line.value = VALUE;
 			}
-		}
 
-		code.push_back(line);
+			code.push_back(line);
+		}
 	}
 }
 

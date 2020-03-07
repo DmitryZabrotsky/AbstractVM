@@ -43,3 +43,51 @@ const char *Exeptions::ValueOverflowExeption::what() const noexcept {
 const char *Exeptions::ValueUnderflowExeption::what() const noexcept {
 	return "Underflow value";
 };
+
+const char *Exeptions::DivisionByZero::what() const noexcept {
+	return "Division by zero";
+};
+
+const char *Exeptions::ModuloByZero::what() const noexcept {
+	return "Modulo by zero";
+};
+
+const char *Exeptions::EmptyStackOnOpeartionAdd::what() const noexcept {
+	return "Empty stack on opearation add";
+};
+
+const char *Exeptions::NotEnoughOperandsOnOpeartionAdd::what() const noexcept {
+	return "Not enough operands on opeartion add";
+};
+
+const char *Exeptions::EmptyStackOnOpeartionSub::what() const noexcept {
+	return "Empty stack on opearation sub";
+};
+
+const char *Exeptions::NotEnoughOperandsOnOpeartionSub::what() const noexcept {
+	return "Not enough operands on opeartion sub";
+};
+
+const char *Exeptions::EmptyStackOnOpeartionMul::what() const noexcept {
+	return "Empty stack on opearation mul";
+};
+
+const char *Exeptions::NotEnoughOperandsOnOpeartionMul::what() const noexcept {
+	return "Not enough operands on opeartion mul";
+};
+
+const char *Exeptions::EmptyStackOnOpeartionDiv::what() const noexcept {
+	return "Empty stack on opearation div";
+};
+
+const char *Exeptions::NotEnoughOperandsOnOpeartionDiv::what() const noexcept {
+	return "Not enough operands on opeartion div";
+};
+
+const char *Exeptions::EmptyStackOnOpeartionMod::what() const noexcept {
+	return "Empty stack on opearation mod";
+};
+
+const char *Exeptions::NotEnoughOperandsOnOpeartionMod::what() const noexcept {
+	return "Not enough operands on opeartion mod";
+};

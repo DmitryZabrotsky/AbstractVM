@@ -52,6 +52,65 @@ public:
 	public:
 		const char *what() const noexcept override;
 	};
+
+	class DivisionByZero : public std::exception {
+	public:
+		const char *what() const noexcept override;
+	};
+
+	class ModuloByZero : public std::exception {
+	public:
+		const char *what() const noexcept override;
+	};
+
+	class EmptyStackOnOpeartionAdd : public std::exception {
+	public:
+		const char *what() const noexcept override;
+	};
+
+	class NotEnoughOperandsOnOpeartionAdd : public std::exception {
+	public:
+		const char *what() const noexcept override;
+	};
+
+	class EmptyStackOnOpeartionSub : public std::exception {
+		public:
+		const char *what() const noexcept override;
+	};
+
+	class NotEnoughOperandsOnOpeartionSub : public std::exception {
+	public:
+		const char *what() const noexcept override;
+	};
+
+	class EmptyStackOnOpeartionMul : public std::exception {
+		public:
+		const char *what() const noexcept override;
+	};
+
+	class NotEnoughOperandsOnOpeartionMul : public std::exception {
+	public:
+		const char *what() const noexcept override;
+	};
+
+	class EmptyStackOnOpeartionDiv : public std::exception {
+		public:
+		const char *what() const noexcept override;
+	};
+
+	class NotEnoughOperandsOnOpeartionDiv : public std::exception {
+	public:
+		const char *what() const noexcept override;
+	};
+
+	class EmptyStackOnOpeartionMod : public std::exception {
+		public:
+		const char *what() const noexcept override;
+	};
+	class NotEnoughOperandsOnOpeartionMod : public std::exception {
+		public:
+		const char *what() const noexcept override;
+	};
 };
 
 #endif

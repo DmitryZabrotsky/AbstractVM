@@ -31,18 +31,22 @@ private:
 
     void splitValue(std::string val);
     value_t splitInstructionValue(std::string typevalue);
+    bool isEmptyStack();
+    bool isTwoValuesExistInStack();
 
 	void push(CodeLine &line);
 	void pop(CodeLine &line);
 	void dump(CodeLine &line);
 	void assert(CodeLine &line);
+	void print(CodeLine &line);
+	void exit(CodeLine &line);
 	void add(CodeLine &line);
 	void sub(CodeLine &line);
 	void mul(CodeLine &line);
 	void div(CodeLine &line);
 	void mod(CodeLine &line);
-	void print(CodeLine &line);
-	void exit(CodeLine &line);
+
+    void printInfoAboutOperand(IOperand const * opearnd);
 };
 
 #endif
