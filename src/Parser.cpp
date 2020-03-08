@@ -8,15 +8,10 @@ Parser::Parser() {
 	{"print",  &Parser::print},	{"exit",   &Parser::exit}};
 };
 
-Parser::~Parser() {};
-
-Parser::Parser(Parser const &obj) {
-    *this = obj;
-};
-
-Parser &Parser::operator=(Parser const &obj) {
-    this->errors = obj.errors;
-    return (*this);
+Parser::~Parser() {
+    for (auto operand : this->operands)
+		delete operand;
+	this->operands.clear();
 };
 
 value_t Parser::splitInstructionValue(std::string typevalue) {
@@ -39,7 +34,7 @@ bool Parser::isTwoValuesExistInStack() {
 }
 
 void Parser::parse(code_t &code) {
-    std::cout << "\n\n\t\t \e[35m[ Pareser ]\e[0m : parse code phase" << std::endl;
+    std::cout << "\n\n \e[35m[ Pareser ]\e[0m : parse code phase" << std::endl;
 
     for (auto line : code) {
         (this->*(this->instructions[line.instruction]))(line);
@@ -65,22 +60,85 @@ void Parser::push(CodeLine &line) {
 
 void Parser::pop(CodeLine &line) {
     std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+
+    if (this->isEmptyStack()) {
+		throw Exeptions::EmptyStackOnOpeartionPop();
+    } else {
+	    this->operands.pop_back();
+    }
 };
 
 void Parser::dump(CodeLine &line) {
     std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+
+    if (this->isEmptyStack()) {
+		throw Exeptions::EmptyStackOnOpeartionPop();
+    } else {
+        std::for_each(this->operands.rbegin(), this->operands.rend(), [](const auto & operand) {
+            std::cout << operand->toString() << std::endl;
+        });
+    }
 };
 
 void Parser::assert(CodeLine &line) {
     std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+
+    value_t instructionValue = splitInstructionValue(line.value);
+
+    std::cout << INS_VALUE_TYPE << std::endl;
+    std::cout << INS_VALUE << std::endl;
+
+    auto operand = Factory::createNewOperand(this->types[INS_VALUE_TYPE], INS_VALUE);
+
+    std::cout << "Operand type: " << operand->getType() << std::endl;
+    std::cout << "Operand value: " << operand->toString() << std::endl;
+
+    if (this->isEmptyStack()) {
+		throw Exeptions::EmptyStackOnOpeartionAssert();
+    }
+    auto topoperand = this->operands.back();
+
+    std::cout << "Top operand type: " << topoperand->getType() << std::endl;
+    std::cout << "Top operand value: " << topoperand->toString() << std::endl;
+
+    bool res = (topoperand->getType() == operand->getType()) && (topoperand->toString() == operand->toString());
+
+    delete (operand);
+
+    if (!res) {
+        throw Exeptions::AssertionFailed();
+    }
+
 };
 
 void Parser::print(CodeLine &line) {
     std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+
+    if (this->isEmptyStack()) {
+		throw Exeptions::EmptyStackOnOpeartionAssert();
+    }
+
+    auto topoperand = this->operands.back();
+
+    std::cout << "Top operand type: " << topoperand->getType() << std::endl;
+    std::cout << "Top operand value: " << topoperand->toString() << std::endl;
+
+    bool res = (topoperand->getType() == Int8);
+    if (!res) {
+        throw Exeptions::AssertionFailed();
+    }
+    std::cout << static_cast<char>(std::stoll(topoperand->toString())) << std::endl;
+
 };
 
 void Parser::exit(CodeLine &line) {
     std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+
+    if (this->exitins) {
+        throw Exeptions::MoreThenOneExitOpeartion();
+    } else  {
+        this->exitins = true;
+    }
 };
 
 // arifmetic operations

@@ -91,3 +91,19 @@ const char *Exeptions::EmptyStackOnOpeartionMod::what() const noexcept {
 const char *Exeptions::NotEnoughOperandsOnOpeartionMod::what() const noexcept {
 	return "Not enough operands on opeartion mod";
 };
+
+const char *Exeptions::EmptyStackOnOpeartionPop::what() const noexcept {
+	return "Empty stack on opearation pop";
+};
+
+const char *Exeptions::EmptyStackOnOpeartionAssert::what() const noexcept {
+	return "Empty stack on opearation assert";
+};
+
+const char *Exeptions::AssertionFailed::what() const noexcept {
+	return "Value at the top of the stack not equal to the one passed";
+};
+
+const char *Exeptions::MoreThenOneExitOpeartion::what() const noexcept {
+	return "More then one exit opeartion was found";
+};

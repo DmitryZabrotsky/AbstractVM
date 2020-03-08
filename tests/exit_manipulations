@@ -1,27 +1,25 @@
-push int32(42)
-push int32(33)
-
+push int8(88)
+push int16(3243)
+dump
+push int32(43)
+assert int32(43)
+push float(2.2)
+dump
+push double(2.2)
 add
 
-push float(44.55)
+exit
 
-mul
-
-error here
-
-pop pop push
-
-push
-
-assert
-
-push double(42.42)
-push int32(42)
-
-dump
-
-pop
-
-assert double(42.42)
+push int8(80)
+print
+push int8(73)
+print
+push int8(83)
+print
+push int8(79)
+print
+push int8(83)
+print
 
 exit
+;;

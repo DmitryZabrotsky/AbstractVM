@@ -111,6 +111,26 @@ public:
 		public:
 		const char *what() const noexcept override;
 	};
+
+	class EmptyStackOnOpeartionPop : public std::exception {
+		public:
+		const char *what() const noexcept override;
+	};
+
+	class EmptyStackOnOpeartionAssert : public std::exception {
+		public:
+		const char *what() const noexcept override;
+	};
+
+	class AssertionFailed : public std::exception {
+		public:
+		const char *what() const noexcept override;
+	};
+
+	class MoreThenOneExitOpeartion : public std::exception {
+		public:
+		const char *what() const noexcept override;
+	};
 };
 
 #endif

@@ -14,12 +14,13 @@ class Parser {
 public:
 
     int errors;
+    bool exitins;
 
     Parser();
     ~Parser();
-    Parser(Parser const &obj);
 
-    Parser &operator=(Parser const &obj);
+    Parser(Parser const &obj) = delete;
+    Parser &operator=(Parser const &obj) = delete;
 
     void parse(code_t &code);
 
