@@ -15,7 +15,7 @@ class Operand : public IOperand {
                 case Int8: {
                     long long val = std::stoll(value);
 
-                    std::cout << std::to_string(val) << " max: " << SCHAR_MAX << " min: " <<  SCHAR_MIN << std::endl;
+                    // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << SCHAR_MAX << " min: " <<  SCHAR_MIN << std::endl;
 
                     if (val > SCHAR_MAX) {
                         throw Exeptions::ValueOverflowExeption();
@@ -28,7 +28,7 @@ class Operand : public IOperand {
                 case Int16: {
                     long long val = std::stoll(value);
 
-                    std::cout << std::to_string(val) << " max: " << SHRT_MAX << " min: " <<  SHRT_MIN << std::endl;
+                    // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << SHRT_MAX << " min: " <<  SHRT_MIN << std::endl;
 
                     if (val > SHRT_MAX) {
                         throw Exeptions::ValueOverflowExeption();
@@ -41,7 +41,7 @@ class Operand : public IOperand {
                 case Int32: {
                     long long val = std::stoll(value);
 
-                    std::cout << std::to_string(val) << " max: " << INT_MAX << " min: " <<  INT_MIN << std::endl;
+                    // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << INT_MAX << " min: " <<  INT_MIN << std::endl;
 
                     if (val > INT_MAX) {
                         throw Exeptions::ValueOverflowExeption();
@@ -54,7 +54,7 @@ class Operand : public IOperand {
                 case Float: {
                     long double val = std::stod(value);
 
-                    std::cout << std::to_string(val) << " max: " << FLT_MAX << " min: " <<  -FLT_MAX << std::endl;
+                    // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << FLT_MAX << " min: " <<  -FLT_MAX << std::endl;
 
                     if (val > FLT_MAX) {
                         throw Exeptions::ValueOverflowExeption();
@@ -67,7 +67,7 @@ class Operand : public IOperand {
                 case Double: {
                     long double val = std::stod(value);
 
-                    std::cout << std::to_string(val) << " max: " << DBL_MAX << " min: " <<  -DBL_MAX << std::endl;
+                    // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << DBL_MAX << " min: " <<  -DBL_MAX << std::endl;
 
                     if (val > DBL_MAX) {
                         throw Exeptions::ValueOverflowExeption();
@@ -98,7 +98,6 @@ class Operand : public IOperand {
 
         IOperand const * operator+( IOperand const & operand ) const override {
             eOperandType resType;
-		    std::string resValue;
 
             if (type > operand.getType()) {
                 resType = this->type;
@@ -106,19 +105,21 @@ class Operand : public IOperand {
                 resType = operand.getType();
             }
 
+    		std::ostringstream oss;
             if (resType > Int32) {
-    		    resValue = std::to_string(std::stold(this->toString()) + std::stold(operand.toString()));
+    		    auto resValue = (std::stold(this->toString())) + (std::stold(operand.toString()));
+                oss << resValue;
             } else {
-    		    resValue = std::to_string(std::stoll(this->toString()) + std::stoll(operand.toString()));
+    		    auto resValue = (std::stoll(this->toString())) + (std::stoll(operand.toString()));
+                oss << resValue;
             }
 
-            std::cout << "IOperand operator+ " << std::endl;
+            // std::cout << "[ operand ] " << "operator + " << std::endl;
 
-            return Factory::createNewOperand(resType, resValue);
+            return Factory::createNewOperand(resType, oss.str());
         };
 		IOperand const * operator-( IOperand const & operand ) const override {
             eOperandType resType;
-		    std::string resValue;
 
             if (type > operand.getType()) {
                 resType = this->type;
@@ -126,19 +127,21 @@ class Operand : public IOperand {
                 resType = operand.getType();
             }
 
+    		std::ostringstream oss;
             if (resType > Int32) {
-    		    resValue = std::to_string(std::stold(this->toString()) - std::stold(operand.toString()));
+    		    auto resValue = (std::stold(this->toString())) - (std::stold(operand.toString()));
+                oss << resValue;
             } else {
-    		    resValue = std::to_string(std::stoll(this->toString()) - std::stoll(operand.toString()));
+    		    auto resValue = (std::stoll(this->toString())) - (std::stoll(operand.toString()));
+                oss << resValue;
             }
 
-            std::cout << "IOperand operator- " << std::endl;
+            // std::cout << "[ operand ] " << "operator - " << std::endl;
 
-            return Factory::createNewOperand(resType, resValue);
+            return Factory::createNewOperand(resType, oss.str());
         };
 		IOperand const * operator*( IOperand const & operand ) const override {
             eOperandType resType;
-		    std::string resValue;
 
             if (type > operand.getType()) {
                 resType = this->type;
@@ -146,15 +149,18 @@ class Operand : public IOperand {
                 resType = operand.getType();
             }
 
+    		std::ostringstream oss;
             if (resType > Int32) {
-    		    resValue = std::to_string(std::stold(this->toString()) * std::stold(operand.toString()));
+    		    auto resValue = (std::stold(this->toString())) * (std::stold(operand.toString()));
+                oss << resValue;
             } else {
-    		    resValue = std::to_string(std::stoll(this->toString()) * std::stoll(operand.toString()));
+    		    auto resValue = (std::stoll(this->toString())) * (std::stoll(operand.toString()));
+                oss << resValue;
             }
 
-            std::cout << "IOperand operator* " << std::endl;
+            // std::cout << "[ operand ] " << "operator * " << std::endl;
 
-            return Factory::createNewOperand(resType, resValue);
+            return Factory::createNewOperand(resType, oss.str());
         };
 
         bool isZero(eOperandType const type, std::string const &val) const {
@@ -170,7 +176,6 @@ class Operand : public IOperand {
 
 		IOperand const * operator/( IOperand const & operand ) const override {
             eOperandType resType;
-		    std::string resValue;
 
             if (type > operand.getType()) {
                 resType = this->type;
@@ -182,19 +187,21 @@ class Operand : public IOperand {
                 throw Exeptions::DivisionByZero();
             }
 
+    		std::ostringstream oss;
             if (resType > Int32) {
-    		    resValue = std::to_string(std::stold(this->toString()) / std::stold(operand.toString()));
+    		    auto resValue = (std::stold(this->toString())) / (std::stold(operand.toString()));
+                oss << resValue;
             } else {
-    		    resValue = std::to_string(std::stoll(this->toString()) / std::stoll(operand.toString()));
+    		    auto resValue = (std::stoll(this->toString())) / (std::stoll(operand.toString()));
+                oss << resValue;
             }
 
-            std::cout << "IOperand operator/ " << std::endl;
+            // std::cout << "[ operand ] " << "operator / " << std::endl;
 
-            return Factory::createNewOperand(resType, resValue);
+            return Factory::createNewOperand(resType, oss.str());
         };
 		IOperand const * operator%( IOperand const & operand ) const override {
             eOperandType resType;
-		    std::string resValue;
 
             if (type > operand.getType()) {
                 resType = this->type;
@@ -206,15 +213,18 @@ class Operand : public IOperand {
                 throw Exeptions::ModuloByZero();
             }
 
+    		std::ostringstream oss;
             if (resType > Int32) {
-                resValue = std::to_string(fmod(std::stold(this->toString()), std::stold(operand.toString())));
+                auto resValue = fmod(std::stold(this->toString()), std::stold(operand.toString()));
+                oss << resValue;
             } else {
-                resValue = std::to_string(std::stoll(this->toString()) % std::stoll(operand.toString()));
+                auto resValue = (std::stoll(this->toString())) % (std::stoll(operand.toString()));
+                oss << resValue;
             }
 
-            std::cout << "IOperand operator% " << std::endl;
+            // std::cout << "[ operand ] " << "operator % " << std::endl;
 
-            return Factory::createNewOperand(resType, resValue);
+            return Factory::createNewOperand(resType, oss.str());
         };
 };
 

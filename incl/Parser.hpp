@@ -16,13 +16,15 @@ public:
     int errors;
     bool exitins;
 
+    bool debug;
+
     Parser();
     ~Parser();
 
     Parser(Parser const &obj) = delete;
     Parser &operator=(Parser const &obj) = delete;
 
-    void parse(code_t &code);
+    void parse(code_t &code, bool debug);
 
 private:
 

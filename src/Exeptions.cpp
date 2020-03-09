@@ -105,5 +105,9 @@ const char *Exeptions::AssertionFailed::what() const noexcept {
 };
 
 const char *Exeptions::MoreThenOneExitOpeartion::what() const noexcept {
-	return "More then one exit opeartion was found";
+	return "More then one exit operation was found";
+};
+
+const char *Exeptions::MissingExitInstruction::what() const noexcept {
+	return "Missing exit instruction";
 };

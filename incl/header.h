@@ -15,6 +15,7 @@
 #include <cmath>
 #include <climits>
 #include <cfloat>
+#include <map>
 
 #include "Exeptions.hpp"
 

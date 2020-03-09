@@ -1,4 +1,4 @@
-CC = g++ -std=c++11 -I incl
+CC = g++ -std=c++14 -I incl
 CFLAGS = -Wall -Wextra -Werror
 NAME = avm
 SRC = main.cpp Lexer.cpp Exeptions.cpp CodeLine.cpp Factory.cpp Parser.cpp

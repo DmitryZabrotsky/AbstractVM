@@ -8,7 +8,7 @@ dump
 push double(2.2)
 add
 
-exit
+;exit
 
 push int8(80)
 print
@@ -20,6 +20,7 @@ push int8(79)
 print
 push int8(83)
 print
+dump
 
-exit
+;exit
 ;;

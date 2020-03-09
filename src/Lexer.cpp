@@ -21,14 +21,39 @@ Lexer &Lexer::operator=(Lexer const &obj) {
 
 // public
 
-void Lexer::handle(int ac, char const **av, code_t &code) {
-    // std::cout << "\n\n\t\t \e[36m[ Lexer ]\e[0m : lexer handling phase" << std::endl;
+int findNotFlagIndex(int ac, char const **av) {
+	for (int i = 1; i < ac; i++) {
+		std::string arg = av[i];
+		if (arg != "-d")
+			return i;
+	}
+	return 1;
+};
+
+void Lexer::handle(int ac, char const **av, code_t &code, bool debug) {
+	this->debug = debug;
+
+	if (this->debug)
+    	std::cout << "\e[36;1m[ lexer ]\e[0m : lexer handling phase" << std::endl;
+
 	switch (ac) {
 		case 1:
 			handleConsole(code);
 			break;
 		case 2:
-			handleFile(av[1], code);
+			if (this->debug) {
+				handleConsole(code);
+			} else {
+				handleFile(av[1], code);
+			}
+			break;
+		case 3:
+			if (this->debug) {
+				int nfi = findNotFlagIndex(ac, av);
+				handleFile(av[nfi], code);
+			} else {
+				handleFile(av[1], code);
+			}
 			break;
 		default:
 			throw Exeptions::WrongArgumentsNumber();
@@ -70,7 +95,7 @@ void Lexer::handleFile(std::string path, code_t &code) {
 				catch(const std::exception& e)
 				{
 					std::stringstream stringstream;
-					stringstream << " \e[32;1mline " << line.number << "\e[0m : lexical \e[31merror\e[0m : " << e.what();
+					stringstream << " \e[32;1mline " << line.number << "\e[0m : lexical \e[31;1merror\e[0m : " << e.what();
 					line.writeError(stringstream.str());
 					this->errors++;
 				}
@@ -121,7 +146,7 @@ void Lexer::handleConsole(code_t &code) {
 			catch(const std::exception& e)
 			{
 				std::stringstream stringstream;
-				stringstream << " \e[32;1mline " << line.number << "\e[0m : lexical \e[31merror\e[0m : " << e.what();
+				stringstream << " \e[32;1mline " << line.number << "\e[0m : lexical \e[31;1merror\e[0m : " << e.what();
 				line.writeError(stringstream.str());
 				this->errors++;
 			}

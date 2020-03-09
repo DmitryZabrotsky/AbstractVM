@@ -33,33 +33,43 @@ bool Parser::isTwoValuesExistInStack() {
     return this->operands.size() < 2;
 }
 
-void Parser::parse(code_t &code) {
-    std::cout << "\n\n \e[35m[ Pareser ]\e[0m : parse code phase" << std::endl;
+void Parser::parse(code_t &code, bool debug) {
+    this->debug = debug;
+
+    if (this->debug)
+        std::cout << "\e[36;1m[ parser ]\e[0m : parse code phase" << std::endl;
 
     for (auto line : code) {
-        (this->*(this->instructions[line.instruction]))(line);
+        if (!exitins)
+            (this->*(this->instructions[line.instruction]))(line);
     };
+    if (!exitins)
+        throw Exeptions::MissingExitInstruction();
 };
 
 void Parser::push(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     value_t instructionValue = splitInstructionValue(line.value);
 
-    std::cout << INS_VALUE_TYPE << std::endl;
-    std::cout << INS_VALUE << std::endl;
+    if (this->debug)
+        std::cout << "[ parser ] after split ins val: "  << INS_VALUE_TYPE << " " << INS_VALUE << std::endl;
 
     auto operand = Factory::createNewOperand(this->types[INS_VALUE_TYPE], INS_VALUE);
 
-    std::cout << "Operand type: " << operand->getType() << std::endl;
-    std::cout << "Operand value: " << operand->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] result operand : type \e[38;5;117;1m" << operand->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << operand->toString() << "\e[0m" << std::endl;
+    }
 
     // put Operand object in the end of the vector with out copying :
     this->operands.emplace_back(operand);
 };
 
 void Parser::pop(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     if (this->isEmptyStack()) {
 		throw Exeptions::EmptyStackOnOpeartionPop();
@@ -69,7 +79,8 @@ void Parser::pop(CodeLine &line) {
 };
 
 void Parser::dump(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     if (this->isEmptyStack()) {
 		throw Exeptions::EmptyStackOnOpeartionPop();
@@ -81,25 +92,30 @@ void Parser::dump(CodeLine &line) {
 };
 
 void Parser::assert(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     value_t instructionValue = splitInstructionValue(line.value);
 
-    std::cout << INS_VALUE_TYPE << std::endl;
-    std::cout << INS_VALUE << std::endl;
+    if (this->debug)
+        std::cout << "[ parser ] after split ins val: "  << INS_VALUE_TYPE << " " << INS_VALUE << std::endl;
 
     auto operand = Factory::createNewOperand(this->types[INS_VALUE_TYPE], INS_VALUE);
 
-    std::cout << "Operand type: " << operand->getType() << std::endl;
-    std::cout << "Operand value: " << operand->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] assert operand : type \e[38;5;117;1m" << operand->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << operand->toString() << "\e[0m" << std::endl;
+    }
 
     if (this->isEmptyStack()) {
 		throw Exeptions::EmptyStackOnOpeartionAssert();
     }
     auto topoperand = this->operands.back();
 
-    std::cout << "Top operand type: " << topoperand->getType() << std::endl;
-    std::cout << "Top operand value: " << topoperand->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] stack operand : type \e[38;5;117;1m" << topoperand->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << topoperand->toString() << "\e[0m" << std::endl;
+    }
 
     bool res = (topoperand->getType() == operand->getType()) && (topoperand->toString() == operand->toString());
 
@@ -112,7 +128,8 @@ void Parser::assert(CodeLine &line) {
 };
 
 void Parser::print(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     if (this->isEmptyStack()) {
 		throw Exeptions::EmptyStackOnOpeartionAssert();
@@ -120,8 +137,10 @@ void Parser::print(CodeLine &line) {
 
     auto topoperand = this->operands.back();
 
-    std::cout << "Top operand type: " << topoperand->getType() << std::endl;
-    std::cout << "Top operand value: " << topoperand->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] stack operand : type \e[38;5;117;1m" << topoperand->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << topoperand->toString() << "\e[0m" << std::endl;
+    }
 
     bool res = (topoperand->getType() == Int8);
     if (!res) {
@@ -132,7 +151,8 @@ void Parser::print(CodeLine &line) {
 };
 
 void Parser::exit(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     if (this->exitins) {
         throw Exeptions::MoreThenOneExitOpeartion();
@@ -143,7 +163,8 @@ void Parser::exit(CodeLine &line) {
 
 // arifmetic operations
 void Parser::add(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     if (this->isEmptyStack()) {
 		throw Exeptions::EmptyStackOnOpeartionAdd();
@@ -153,27 +174,35 @@ void Parser::add(CodeLine &line) {
     }
 
 	IOperand const *b = this->operands.back();
-    std::cout << "Operand type: " << b->getType() << std::endl;
-    std::cout << "Operand value: " << b->toString() << std::endl;
-	this->operands.pop_back();
+    if (this->debug) {
+        std::cout << "[ parser ] b : type \e[38;5;117;1m" << b->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << b->toString() << "\e[0m" << std::endl;
+    }
+    this->operands.pop_back();
+
 	IOperand const *a = this->operands.back();
-    std::cout << "Operand type: " << a->getType() << std::endl;
-    std::cout << "Operand value: " << a->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] a : type \e[38;5;117;1m" << a->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << a->toString() << "\e[0m" << std::endl;
+    }
 	this->operands.pop_back();
 
     auto opres = *a + *b;
 
-    std::cout << "Operand type: " << opres->getType() << std::endl;
-    std::cout << "Operand value: " << opres->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] opres : type \e[38;5;117;1m" << opres->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << opres->toString() << "\e[0m" << std::endl;
+    }
 
-	this->operands.emplace_back(opres);
+    this->operands.emplace_back(opres);
 
 	delete (b);
 	delete (a);
 };
 
 void Parser::sub(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     if (this->isEmptyStack()) {
 		throw Exeptions::EmptyStackOnOpeartionSub();
@@ -183,18 +212,25 @@ void Parser::sub(CodeLine &line) {
     }
 
 	IOperand const *b = this->operands.back();
-    std::cout << "Operand type: " << b->getType() << std::endl;
-    std::cout << "Operand value: " << b->toString() << std::endl;
-	this->operands.pop_back();
+    if (this->debug) {
+        std::cout << "[ parser ] b : type \e[38;5;117;1m" << b->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << b->toString() << "\e[0m" << std::endl;
+    }
+    this->operands.pop_back();
+
 	IOperand const *a = this->operands.back();
-    std::cout << "Operand type: " << a->getType() << std::endl;
-    std::cout << "Operand value: " << a->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] a : type \e[38;5;117;1m" << a->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << a->toString() << "\e[0m" << std::endl;
+    }
 	this->operands.pop_back();
 
     auto opres = *a - *b;
 
-    std::cout << "Operand type: " << opres->getType() << std::endl;
-    std::cout << "Operand value: " << opres->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] opres : type \e[38;5;117;1m" << opres->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << opres->toString() << "\e[0m" << std::endl;
+    }
 
 	this->operands.emplace_back(opres);
 
@@ -203,7 +239,8 @@ void Parser::sub(CodeLine &line) {
 };
 
 void Parser::mul(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     if (this->isEmptyStack()) {
 		throw Exeptions::EmptyStackOnOpeartionMul();
@@ -213,18 +250,25 @@ void Parser::mul(CodeLine &line) {
     }
 
 	IOperand const *b = this->operands.back();
-    std::cout << "Operand type: " << b->getType() << std::endl;
-    std::cout << "Operand value: " << b->toString() << std::endl;
-	this->operands.pop_back();
+    if (this->debug) {
+        std::cout << "[ parser ] b : type \e[38;5;117;1m" << b->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << b->toString() << "\e[0m" << std::endl;
+    }
+    this->operands.pop_back();
+
 	IOperand const *a = this->operands.back();
-    std::cout << "Operand type: " << a->getType() << std::endl;
-    std::cout << "Operand value: " << a->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] a : type \e[38;5;117;1m" << a->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << a->toString() << "\e[0m" << std::endl;
+    }
 	this->operands.pop_back();
 
     auto opres = *a * *b;
 
-    std::cout << "Operand type: " << opres->getType() << std::endl;
-    std::cout << "Operand value: " << opres->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] opres : type \e[38;5;117;1m" << opres->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << opres->toString() << "\e[0m" << std::endl;
+    }
 
 	this->operands.emplace_back(opres);
 
@@ -233,7 +277,8 @@ void Parser::mul(CodeLine &line) {
 };
 
 void Parser::div(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     if (this->isEmptyStack()) {
 		throw Exeptions::EmptyStackOnOpeartionDiv();
@@ -243,18 +288,25 @@ void Parser::div(CodeLine &line) {
     }
 
 	IOperand const *b = this->operands.back();
-    std::cout << "Operand type: " << b->getType() << std::endl;
-    std::cout << "Operand value: " << b->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] b : type \e[38;5;117;1m" << b->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << b->toString() << "\e[0m" << std::endl;
+    }
 	this->operands.pop_back();
+
 	IOperand const *a = this->operands.back();
-    std::cout << "Operand type: " << a->getType() << std::endl;
-    std::cout << "Operand value: " << a->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] a : type \e[38;5;117;1m" << a->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << a->toString() << "\e[0m" << std::endl;
+    }
 	this->operands.pop_back();
 
     auto opres = *a / *b;
 
-    std::cout << "Operand type: " << opres->getType() << std::endl;
-    std::cout << "Operand value: " << opres->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] opres : type \e[38;5;117;1m" << opres->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << opres->toString() << "\e[0m" << std::endl;
+    }
 
 	this->operands.emplace_back(opres);
 
@@ -263,7 +315,8 @@ void Parser::div(CodeLine &line) {
 };
 
 void Parser::mod(CodeLine &line) {
-    std::cout << "\n\e[35m" << line.instruction << "\e[0m" << std::endl;
+    if (this->debug)
+        std::cout << "\n[ parser ] \e[33;1m" << line.instruction << "\e[0m" << std::endl;
 
     if (this->isEmptyStack()) {
 		throw Exeptions::EmptyStackOnOpeartionMod();
@@ -273,20 +326,27 @@ void Parser::mod(CodeLine &line) {
     }
 
 	IOperand const *b = this->operands.back();
-    std::cout << "Operand type: " << b->getType() << std::endl;
-    std::cout << "Operand value: " << b->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] b : type \e[38;5;117;1m" << b->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << b->toString() << "\e[0m" << std::endl;
+    }
 	this->operands.pop_back();
+
 	IOperand const *a = this->operands.back();
-    std::cout << "Operand type: " << a->getType() << std::endl;
-    std::cout << "Operand value: " << a->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] a : type \e[38;5;117;1m" << a->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << a->toString() << "\e[0m" << std::endl;
+    }
 	this->operands.pop_back();
 
     auto opres = *a % *b;
 
-    std::cout << "Operand type: " << opres->getType() << std::endl;
-    std::cout << "Operand value: " << opres->toString() << std::endl;
+    if (this->debug) {
+        std::cout << "[ parser ] opres : type \e[38;5;117;1m" << opres->getType();
+        std::cout << "\e[0m value \e[38;5;28;1m" << opres->toString() << "\e[0m" << std::endl;
+    }
 
-	this->operands.emplace_back(opres);
+    this->operands.emplace_back(opres);
 
 	delete (b);
 	delete (a);

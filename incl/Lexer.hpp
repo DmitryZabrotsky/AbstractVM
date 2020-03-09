@@ -12,6 +12,7 @@ typedef std::vector<CodeLine> code_t;
 class Lexer {
 public:
     int errors;
+    bool debug;
 
     Lexer();
     ~Lexer();
@@ -19,7 +20,7 @@ public:
 
     Lexer &operator=(Lexer const &obj);
 
-    void handle(int ac, char const **av, code_t &code);
+    void handle(int ac, char const **av, code_t &code, bool debug);
 
 private:
     void handleFile(std::string path, code_t &code);
