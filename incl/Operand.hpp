@@ -13,8 +13,14 @@ class Operand : public IOperand {
         explicit Operand<T>(eOperandType type, std::string value) : type(type), value(value) {
             switch (type) {
                 case Int8: {
-                    long long val = std::stoll(value);
 
+                    long long val;
+
+                    try {
+                        val = std::stoll(value);
+                    } catch (std::exception &e) {
+                        throw Exeptions::OutOfRange();
+                    }
                     // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << SCHAR_MAX << " min: " <<  SCHAR_MIN << std::endl;
 
                     if (val > SCHAR_MAX) {
@@ -26,7 +32,13 @@ class Operand : public IOperand {
                 }
 
                 case Int16: {
-                    long long val = std::stoll(value);
+                    long long val;
+
+                    try {
+                        val = std::stoll(value);
+                    } catch (std::exception &e) {
+                        throw Exeptions::OutOfRange();
+                    }
 
                     // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << SHRT_MAX << " min: " <<  SHRT_MIN << std::endl;
 
@@ -39,7 +51,13 @@ class Operand : public IOperand {
                 }
 
                 case Int32: {
-                    long long val = std::stoll(value);
+                    long long val;
+
+                    try {
+                        val = std::stoll(value);
+                    } catch (std::exception &e) {
+                        throw Exeptions::OutOfRange();
+                    }
 
                     // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << INT_MAX << " min: " <<  INT_MIN << std::endl;
 
@@ -52,7 +70,13 @@ class Operand : public IOperand {
                 }
 
                 case Float: {
-                    long double val = std::stod(value);
+                    long double val;
+
+                    try {
+                        val = std::stod(value);
+                    } catch (std::exception &e) {
+                        throw Exeptions::OutOfRange();
+                    }
 
                     // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << FLT_MAX << " min: " <<  -FLT_MAX << std::endl;
 
@@ -65,7 +89,13 @@ class Operand : public IOperand {
                 }
 
                 case Double: {
-                    long double val = std::stod(value);
+                    long double val;
+
+                    try {
+                        val = std::stod(value);
+                    } catch (std::exception &e) {
+                        throw Exeptions::OutOfRange();
+                    }
 
                     // std::cout << "[ operand ] val: " << std::to_string(val) << " max: " << DBL_MAX << " min: " <<  -DBL_MAX << std::endl;
 

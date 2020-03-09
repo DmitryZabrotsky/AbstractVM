@@ -111,3 +111,7 @@ const char *Exeptions::MoreThenOneExitOpeartion::what() const noexcept {
 const char *Exeptions::MissingExitInstruction::what() const noexcept {
 	return "Missing exit instruction";
 };
+
+const char *Exeptions::OutOfRange::what() const noexcept {
+	return "Overflow/Underflow because value out of range";
+};

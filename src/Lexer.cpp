@@ -204,7 +204,7 @@ bool Lexer::checkInstructionWithValue(tokens_t &tokens) {
 		throw Exeptions::InvalidInstraction();
 	}
 
-	std::regex values(R"(^(int8|int16|int32)[(][-]?\d+[)]|^(float|double)[(][-]?\d+(.[0-9]+)[)])");
+	std::regex values(R"(^(int8|int16|int32)[(][-]?\d+[)]|^(float|double)[(][-]?\d+(\.[0-9]+)[)])");
 	if (!regex_match(VALUE, values)) {
 		res = false;
 		throw Exeptions::InvalidValue();
